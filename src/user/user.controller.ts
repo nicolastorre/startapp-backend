@@ -15,17 +15,11 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { FindOneParamDto } from 'src/common/dto/find-one-param.dto';
 import { AuthGuard } from 'src/auth/auth.guard';
 
-@Controller('user')
+@Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @UseGuards(AuthGuard)
-  @Get('/profile')
-  getProfile(@Request() req: any) {
-    return req.user;
-  }
-
-  @Post()
+  @Post('/user')
   create(@Body() createUserDto: CreateUserDto) {
     return this.userService.create(createUserDto);
   }
@@ -35,7 +29,13 @@ export class UserController {
     return this.userService.findAll();
   }
 
-  @Get(':uuid')
+  @UseGuards(AuthGuard)
+  @Get('/user/profile')
+  getProfile(@Request() req: any) {
+    return req.user;
+  }
+
+  @Get('/user/:uuid')
   async findOne(@Param() findOneParamDto: FindOneParamDto) {
     const user = await this.userService.findOneBy('uuid', findOneParamDto.uuid);
 
@@ -46,7 +46,7 @@ export class UserController {
     return user;
   }
 
-  @Patch(':uuid')
+  @Patch('/user/:uuid')
   update(
     @Param() findOneParamDto: FindOneParamDto,
     @Body() updateUserDto: UpdateUserDto,
@@ -54,7 +54,7 @@ export class UserController {
     return this.userService.update(findOneParamDto.uuid, updateUserDto);
   }
 
-  @Delete(':uuid')
+  @Delete('/user/:uuid')
   remove(@Param() findOneParamDto: FindOneParamDto) {
     return this.userService.remove(findOneParamDto.uuid);
   }

@@ -10,4 +10,7 @@ export default () => ({
     database: process.env.DATABASE_NAME,
     synchronize: true,
   },
+  jwt: {
+    secret: process.env.JWT_SECRET,
+  },
 });
