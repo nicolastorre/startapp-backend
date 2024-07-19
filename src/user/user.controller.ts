@@ -14,12 +14,14 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { FindOneParamDto } from 'src/common/dto/find-one-param.dto';
 import { AuthGuard } from 'src/auth/auth.guard';
+import { Public } from 'src/auth/decorators/IsPublic';
 
 @Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post('/user')
+  @Public()
   create(@Body() createUserDto: CreateUserDto) {
     return this.userService.create(createUserDto);
   }
