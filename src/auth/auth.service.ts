@@ -4,6 +4,13 @@ import { UserService } from 'src/user/user.service';
 import { ConnectionService } from './connection.service';
 import { Connection } from './entities/connection.entity';
 import * as bcrypt from 'bcrypt';
+import { ConfigService } from '@nestjs/config';
+
+export type TokenPayload = {
+  uuid: string;
+};
+
+export type Tokens = { accessToken: string; refreshToken: string };
 
 @Injectable()
 export class AuthService {
@@ -11,9 +18,10 @@ export class AuthService {
     private userService: UserService,
     private connectionService: ConnectionService,
     private jwtService: JwtService,
+    private configService: ConfigService,
   ) {}
 
-  async signIn(email: string, pwd: string): Promise<any> {
+  async signIn(email: string, pwd: string): Promise<Tokens> {
     const user = await this.userService.findOneBy('email', email);
     if (!user) {
       throw new UnauthorizedException();
@@ -29,7 +37,7 @@ export class AuthService {
 
     delete user.hashedPassword;
 
-    const payload = { sub: user.uuid, username: user.email };
+    const payload: TokenPayload = { uuid: user.uuid };
 
     const accessToken = await this.jwtService.signAsync(payload);
     const refreshToken = await this.jwtService.signAsync(payload);
@@ -38,6 +46,42 @@ export class AuthService {
     connection.refreshToken = refreshToken;
     connection.user = user;
     this.connectionService.create(connection);
+
+    return {
+      accessToken,
+      refreshToken,
+    };
+  }
+
+  async token(oldRefreshToken: string): Promise<Tokens> {
+    let payload: TokenPayload;
+    try {
+      payload = await this.jwtService.verifyAsync(oldRefreshToken, {
+        secret: this.configService.get('jwt.secret'),
+      });
+    } catch {
+      throw new UnauthorizedException();
+    }
+
+    const user = await this.userService.findOneBy('uuid', payload.uuid);
+    if (!user) {
+      throw new UnauthorizedException();
+    }
+
+    const accessToken = await this.jwtService.signAsync(payload);
+    const refreshToken = await this.jwtService.signAsync(payload);
+
+    const connection = await this.connectionService.findOneBy(
+      'refreshToken',
+      refreshToken,
+    );
+    if (!connection) {
+      throw new UnauthorizedException();
+    }
+
+    connection.refreshToken = refreshToken;
+    connection.user = user;
+    this.connectionService.update(connection.uuid, connection);
 
     return {
       accessToken,

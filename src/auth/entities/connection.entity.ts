@@ -1,4 +1,10 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  BeforeUpdate,
+} from 'typeorm';
 import { User } from '../../user/entities/user.entity';
 
 @Entity()
@@ -9,12 +15,31 @@ export class Connection {
   @Column()
   refreshToken: string;
 
-  @Column({ default: () => "NOW() + interval '1 year'" })
+  @Column({
+    type: 'timestamp',
+    default: () => "NOW() + interval '1 year'",
+  })
   expirationDate: Date;
 
-  @Column({ default: () => 'NOW()' })
-  datetime: Date;
+  @Column({ type: 'timestamp', default: () => 'NOW()' })
+  createdAt: Date;
+
+  @Column({ type: 'timestamp', default: () => 'NOW()' })
+  updatedAt: Date;
 
   @ManyToOne(() => User, (user) => user.connections, { cascade: ['remove'] })
   user: User;
+
+  @BeforeUpdate()
+  addOneYearToExpirationDate() {
+    const currentDate = new Date();
+    this.expirationDate = new Date(
+      currentDate.setFullYear(currentDate.getFullYear() + 1),
+    );
+  }
+
+  @BeforeUpdate()
+  updateUpdatedAt() {
+    this.updatedAt = new Date();
+  }
 }

@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Connection } from './entities/connection.entity';
 import { CreateConnectionDto } from './dto/createConnection.dto';
+import { UpdateConnectionDto } from './dto/updateConnection.dto';
 
 @Injectable()
 export class ConnectionService {
@@ -25,6 +26,18 @@ export class ConnectionService {
 
   findOneBy(key: string, value: any) {
     return this.connectionRepository.findOneBy({ [key]: value });
+  }
+
+  findByValidRefreshToken(refreshToken: string) {
+    return this.connectionRepository
+      .createQueryBuilder()
+      .where('refreshToken = :refreshToken', { refreshToken })
+      .where('expirationDate <= NOW()')
+      .getOne();
+  }
+
+  update(uuid: string, updateConnectionDto: UpdateConnectionDto) {
+    return this.connectionRepository.update(uuid, updateConnectionDto);
   }
 
   remove(uuid: string) {
