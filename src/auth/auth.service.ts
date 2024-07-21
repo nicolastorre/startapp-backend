@@ -53,6 +53,10 @@ export class AuthService {
     };
   }
 
+  async signOut(refreshToken: string) {
+    return this.connectionService.removeBy('refreshToken', refreshToken);
+  }
+
   async token(oldRefreshToken: string): Promise<Tokens> {
     let payload: TokenPayload;
     try {

@@ -16,10 +16,9 @@ export class AuthController {
   }
 
   @HttpCode(HttpStatus.OK)
-  @Public()
   @Post('logout')
-  signOut(@Body() signInDto: SignInDto) {
-    return this.authService.signIn(signInDto.email, signInDto.password);
+  signOut(@Body() tokenDto: TokenDto) {
+    return this.authService.signOut(tokenDto.refreshToken);
   }
 
   @HttpCode(HttpStatus.OK)

@@ -43,4 +43,8 @@ export class ConnectionService {
   remove(uuid: string) {
     return this.connectionRepository.delete({ uuid });
   }
+
+  removeBy(key: string, value: string) {
+    return this.connectionRepository.delete({ [key]: value });
+  }
 }
