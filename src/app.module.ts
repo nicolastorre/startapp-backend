@@ -8,6 +8,8 @@ import { UserModule } from './user/user.module';
 import { User } from './user/entities/user.entity';
 import { CommonModule } from './common/common.module';
 import { AuthModule } from './auth/auth.module';
+import { AuthorizationModule } from './authorization/authorization.module';
+import { ArticleModule } from './article/article.module';
 
 @Module({
   imports: [
@@ -28,6 +30,8 @@ import { AuthModule } from './auth/auth.module';
     UserModule,
     CommonModule,
     AuthModule,
+    AuthorizationModule,
+    ArticleModule,
   ],
   controllers: [AppController],
   providers: [AppService],

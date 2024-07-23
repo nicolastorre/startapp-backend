@@ -15,6 +15,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { FindOneParamDto } from 'src/common/dto/find-one-param.dto';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { Public } from 'src/auth/decorators/IsPublic';
+import { PermissionAction } from 'src/authorization/decorators/permission.decorator';
 
 @Controller('users')
 export class UserController {
@@ -32,6 +33,7 @@ export class UserController {
   }
 
   @UseGuards(AuthGuard)
+  @PermissionAction('READ')
   @Get('/user/profile')
   getProfile(@Request() req: any) {
     return req.user;
