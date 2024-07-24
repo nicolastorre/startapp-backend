@@ -2,7 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
 import { Resource } from './resource.entity';
 import { User } from 'src/user/entities/user.entity';
 
-export enum Actions {
+export enum Action {
   READ = 'READ',
   WRITE = 'WRITE',
   EDIT = 'EDIT',
@@ -25,10 +25,10 @@ export class Permission {
 
   @Column({
     type: 'enum',
-    enum: Actions,
-    default: Actions.READ,
+    enum: Action,
+    default: Action.READ,
   })
-  action: Actions;
+  action: Action;
 
   @Column({ type: 'json', nullable: true })
   conditions?: string;

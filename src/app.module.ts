@@ -9,7 +9,11 @@ import { User } from './user/entities/user.entity';
 import { CommonModule } from './common/common.module';
 import { AuthModule } from './auth/auth.module';
 import { AuthorizationModule } from './authorization/authorization.module';
-import { ArticleModule } from './article/article.module';
+import { ArticlesModule } from './articles/articles.module';
+import { Resource } from './authorization/entities/resource.entity';
+import { Permission } from './authorization/entities/permission.entity';
+import { Article } from './articles/entities/article.entity';
+import { Connection } from './auth/entities/connection.entity';
 
 @Module({
   imports: [
@@ -24,14 +28,14 @@ import { ArticleModule } from './article/article.module';
       useFactory: (config: ConfigService) => ({
         ...config.get('database'),
         autoLoadEntities: true,
-        entities: [User],
+        entities: [User, Connection, Resource, Permission, Article],
       }),
     }),
     UserModule,
     CommonModule,
     AuthModule,
     AuthorizationModule,
-    ArticleModule,
+    ArticlesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

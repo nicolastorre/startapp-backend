@@ -7,36 +7,36 @@ import {
   Param,
   Delete,
 } from '@nestjs/common';
-import { ArticleService } from './article.service';
+import { ArticlesService } from './articles.service';
 import { CreateArticleDto } from './dto/create-article.dto';
 import { UpdateArticleDto } from './dto/update-article.dto';
 
-@Controller('article')
-export class ArticleController {
-  constructor(private readonly articleService: ArticleService) {}
+@Controller('articles')
+export class ArticlesController {
+  constructor(private readonly articlesService: ArticlesService) {}
 
   @Post()
   create(@Body() createArticleDto: CreateArticleDto) {
-    return this.articleService.create(createArticleDto);
+    return this.articlesService.create(createArticleDto);
   }
 
   @Get()
   findAll() {
-    return this.articleService.findAll();
+    return this.articlesService.findAll();
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.articleService.findOne(+id);
+    return this.articlesService.findOne(+id);
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateArticleDto: UpdateArticleDto) {
-    return this.articleService.update('uuid', updateArticleDto);
+    return this.articlesService.update('uuid', updateArticleDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.articleService.remove(+id);
+    return this.articlesService.remove(+id);
   }
 }

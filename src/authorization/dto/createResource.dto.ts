@@ -1,4 +1,5 @@
-import { IsArray, IsString } from 'class-validator';
+import { IsString } from 'class-validator';
+import { CreatePermissionDto } from './createPermission.dto';
 
 export class CreateResourceDto {
   @IsString()
@@ -7,7 +8,5 @@ export class CreateResourceDto {
   @IsString()
   type: string;
 
-  @IsArray()
-  @IsString({ each: true })
-  Uuidpermissions?: string[];
+  permissions?: CreatePermissionDto[];
 }

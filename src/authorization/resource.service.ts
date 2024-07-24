@@ -2,9 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Resource } from './entities/resource.entity';
-import { Actions, Role } from './entities/permission.entity';
 import { CreateResourceDto } from './dto/createResource.dto';
 import { PermissionService } from './permission.service';
+import { Action, Role } from './entities/permission.entity';
 
 @Injectable()
 export class ResourceService {
@@ -14,29 +14,21 @@ export class ResourceService {
     private permissionRepository: PermissionService,
   ) {}
 
+  async createResourceWithDefaultPermissions(
+    createResourceDto: CreateResourceDto,
+  ): Promise<Resource> {
+    for (const action of Object.values(Action) as Action[]) {
+      createResourceDto.permissions?.push({
+        role: Role.ADMIN,
+        action,
+      });
+    }
+    return this.resourceRepository.save(createResourceDto);
+  }
+
   async createResource(
     createResourceDto: CreateResourceDto,
   ): Promise<Resource> {
-    const resource = this.resourceRepository.create(createResourceDto);
-    await this.resourceRepository.save(resource);
-
-    const role = Role.ADMIN;
-    const permissions = [
-      { action: Actions.READ },
-      { action: Actions.WRITE },
-      { action: Actions.EDIT },
-      { action: Actions.DELETE },
-      { action: Actions.PUBLISH },
-    ];
-
-    for (const perm of permissions) {
-      this.permissionRepository.create({
-        ...perm,
-        role,
-        resource,
-      });
-    }
-
-    return resource;
+    return this.resourceRepository.save(createResourceDto);
   }
 }
