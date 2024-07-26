@@ -7,11 +7,10 @@ export class Resource {
   uuid: string;
 
   @Column()
-  name: string;
-
-  @Column()
   type: string;
 
-  @OneToMany(() => Permission, (permission) => permission.resource)
+  @OneToMany(() => Permission, (permission) => permission.resource, {
+    cascade: true,
+  })
   permissions: Permission[];
 }

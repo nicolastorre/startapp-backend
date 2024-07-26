@@ -1,4 +1,8 @@
-import { Permission } from 'src/authorization/entities/permission.entity';
+import {
+  Action,
+  Permission,
+  Role,
+} from 'src/authorization/entities/permission.entity';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -36,5 +40,26 @@ export class PermissionService {
 
   remove(uuid: string) {
     return this.permissionRepository.delete({ uuid });
+  }
+
+  findUserPermissions(userUuid: string, resourceUuid: string, action: Action) {
+    return this.permissionRepository.find({
+      where: {
+        user: { uuid: userUuid },
+        resource: { uuid: resourceUuid },
+        action,
+      },
+    });
+  }
+
+  findRolePermissions(role: Role, resourceUuid: string, action: Action) {
+    return this.permissionRepository
+      .createQueryBuilder('permission')
+      .where('permission.role = :role', { role })
+      .andWhere('permission.resource.uuid = :resourceUuid', {
+        resourceUuid,
+      })
+      .andWhere('permission.action = :action', { action })
+      .getMany();
   }
 }

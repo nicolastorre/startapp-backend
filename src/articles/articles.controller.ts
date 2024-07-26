@@ -6,10 +6,13 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { ArticlesService } from './articles.service';
 import { CreateArticleDto } from './dto/create-article.dto';
 import { UpdateArticleDto } from './dto/update-article.dto';
+import { FindOneParamDto } from 'src/common/dto/find-one-param.dto';
+import { PoliciesGuard } from 'src/authorization/policies.guard';
 
 @Controller('articles')
 export class ArticlesController {
@@ -25,9 +28,10 @@ export class ArticlesController {
     return this.articlesService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.articlesService.findOne(+id);
+  @UseGuards(PoliciesGuard)
+  @Get('/resource/:uuid')
+  async findOne(@Param() findOneParamDto: FindOneParamDto) {
+    return this.articlesService.findBy(findOneParamDto.uuid);
   }
 
   @Patch(':id')

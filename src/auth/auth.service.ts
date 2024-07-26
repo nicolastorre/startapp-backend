@@ -5,9 +5,11 @@ import { ConnectionService } from './connection.service';
 import { Connection } from './entities/connection.entity';
 import * as bcrypt from 'bcrypt';
 import { ConfigService } from '@nestjs/config';
+import { Role } from 'src/authorization/entities/permission.entity';
 
 export type TokenPayload = {
   uuid: string;
+  role: Role;
 };
 
 export type Tokens = { accessToken: string; refreshToken: string };
@@ -37,7 +39,7 @@ export class AuthService {
 
     delete user.hashedPassword;
 
-    const payload: TokenPayload = { uuid: user.uuid };
+    const payload: TokenPayload = { uuid: user.uuid, role: user.role };
 
     const accessToken = await this.jwtService.signAsync(payload);
     const refreshToken = await this.jwtService.signAsync(payload);

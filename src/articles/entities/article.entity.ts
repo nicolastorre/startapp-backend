@@ -9,6 +9,6 @@ export class Article {
   @Column()
   title: string;
 
-  @OneToOne(() => Resource)
+  @OneToOne(() => Resource, { cascade: true })
   resource: Resource;
 }

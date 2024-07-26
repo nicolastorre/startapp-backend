@@ -5,20 +5,23 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Article } from './entities/article.entity';
 import { Repository } from 'typeorm';
 import { Action, Role } from 'src/authorization/entities/permission.entity';
+import { ResourceService } from 'src/authorization/resource.service';
 
 @Injectable()
 export class ArticlesService {
   constructor(
     @InjectRepository(Article)
     private articleRepository: Repository<Article>,
+    private resourceService: ResourceService,
   ) {}
 
   create(createArticleDto: CreateArticleDto) {
-    createArticleDto.resource.name = createArticleDto.title;
-    createArticleDto.resource.type = 'Article';
-    createArticleDto.resource.permissions = [
-      { action: Action.READ, role: Role.ADMIN },
-    ];
+    createArticleDto.resource =
+      this.resourceService.createResourceWithPermissions(
+        'Article',
+        Object.values(Action),
+        Role.ADMIN,
+      );
     return this.articleRepository.save(createArticleDto);
   }
 
@@ -26,8 +29,8 @@ export class ArticlesService {
     return this.articleRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} article`;
+  findBy(uuid: string) {
+    return this.articleRepository.findBy({ uuid });
   }
 
   update(uuid: string, updateArticleDto: UpdateArticleDto) {
