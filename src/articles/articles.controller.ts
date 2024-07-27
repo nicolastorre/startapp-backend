@@ -13,6 +13,8 @@ import { CreateArticleDto } from './dto/create-article.dto';
 import { UpdateArticleDto } from './dto/update-article.dto';
 import { FindOneParamDto } from 'src/common/dto/find-one-param.dto';
 import { PoliciesGuard } from 'src/authorization/policies.guard';
+import { PermissionAction } from 'src/authorization/decorators/permission.decorator';
+import { Action } from 'src/authorization/entities/permission.entity';
 
 @Controller('articles')
 export class ArticlesController {
@@ -23,15 +25,18 @@ export class ArticlesController {
     return this.articlesService.create(createArticleDto);
   }
 
+  @UseGuards(PoliciesGuard)
+  @PermissionAction(Action.READ)
   @Get()
   findAll() {
     return this.articlesService.findAll();
   }
 
   @UseGuards(PoliciesGuard)
+  @PermissionAction(Action.READ)
   @Get('/resource/:uuid')
-  async findOne(@Param() findOneParamDto: FindOneParamDto) {
-    return this.articlesService.findBy(findOneParamDto.uuid);
+  findOne(@Param() findOneParamDto: FindOneParamDto) {
+    return this.articlesService.findOneByResourceUuid(findOneParamDto.uuid);
   }
 
   @Patch(':id')

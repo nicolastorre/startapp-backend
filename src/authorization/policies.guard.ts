@@ -2,6 +2,7 @@ import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { actionType } from './decorators/permission.decorator';
 import { PermissionService } from './permission.service';
+import { Permission } from './entities/permission.entity';
 
 @Injectable()
 export class PoliciesGuard implements CanActivate {
@@ -19,23 +20,30 @@ export class PoliciesGuard implements CanActivate {
       context.getClass(),
     ]);
 
-    // Vérifier les permissions basées sur les utilisateurs
-    const userPermissions = await this.permissionService.findUserPermissions(
-      user.uuid,
-      resource.uuid,
-      action,
-    );
+    let userPermissions: Permission[] = [];
+    let rolePermissions: Permission[] = [];
 
-    // Vérifier les permissions basées sur les rôles
-    const rolePermissions = await this.permissionService.findRolePermissions(
-      user.role,
-      resource.uuid,
-      action,
-    );
+    if (!resource) {
+      rolePermissions = await this.permissionService.findRolePermissions(
+        user.role,
+        action,
+      );
+    } else {
+      userPermissions = await this.permissionService.findUserPermissions(
+        user.uuid,
+        resource.uuid,
+        action,
+      );
+
+      rolePermissions =
+        await this.permissionService.findRolePermissionsByResource(
+          user.role,
+          resource.uuid,
+          action,
+        );
+    }
 
     const permissions = [...userPermissions, ...rolePermissions];
-
-    console.log(user.role, resource.uuid, action, permissions);
 
     return permissions.some((permission) =>
       this.evaluateConditions(permission.conditions, user, resource),

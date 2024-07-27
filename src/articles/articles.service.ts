@@ -29,8 +29,12 @@ export class ArticlesService {
     return this.articleRepository.find();
   }
 
-  findBy(uuid: string) {
-    return this.articleRepository.findBy({ uuid });
+  findOneByResourceUuid(uuid: string): Promise<Article | null> {
+    return this.articleRepository
+      .createQueryBuilder('article')
+      .innerJoinAndSelect('article.resource', 'resource')
+      .where('resource.uuid = :uuid', { uuid })
+      .getOne();
   }
 
   update(uuid: string, updateArticleDto: UpdateArticleDto) {

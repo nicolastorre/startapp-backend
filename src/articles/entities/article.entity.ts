@@ -1,5 +1,11 @@
 import { Resource } from 'src/authorization/entities/resource.entity';
-import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 export class Article {
@@ -9,6 +15,7 @@ export class Article {
   @Column()
   title: string;
 
-  @OneToOne(() => Resource, { cascade: true })
+  @OneToOne(() => Resource, { cascade: true, eager: true })
+  @JoinColumn()
   resource: Resource;
 }

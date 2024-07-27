@@ -52,13 +52,25 @@ export class PermissionService {
     });
   }
 
-  findRolePermissions(role: Role, resourceUuid: string, action: Action) {
+  findRolePermissionsByResource(
+    role: Role,
+    resourceUuid: string,
+    action: Action,
+  ) {
     return this.permissionRepository
       .createQueryBuilder('permission')
       .where('permission.role = :role', { role })
       .andWhere('permission.resource.uuid = :resourceUuid', {
         resourceUuid,
       })
+      .andWhere('permission.action = :action', { action })
+      .getMany();
+  }
+
+  findRolePermissions(role: Role, action: Action) {
+    return this.permissionRepository
+      .createQueryBuilder('permission')
+      .where('permission.role = :role', { role })
       .andWhere('permission.action = :action', { action })
       .getMany();
   }
