@@ -24,7 +24,8 @@ export class ArticlesController {
   constructor(private readonly articlesService: ArticlesService) {}
 
   @Post()
-  create(@Body() createArticleDto: CreateArticleDto) {
+  create(@Body() createArticleDto: CreateArticleDto, @Req() req: any) {
+    createArticleDto.user = req.user.uuid;
     return this.articlesService.create(createArticleDto);
   }
 

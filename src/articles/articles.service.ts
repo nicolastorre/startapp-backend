@@ -36,6 +36,7 @@ export class ArticlesService {
   ): Promise<Article[]> {
     return this.articleRepository
       .createQueryBuilder('article')
+      .innerJoinAndSelect('article.user', 'user')
       .innerJoinAndSelect('article.resource', 'resource')
       .innerJoin('resource.permissions', 'permissions')
       .where('permissions.action = :action', { action })

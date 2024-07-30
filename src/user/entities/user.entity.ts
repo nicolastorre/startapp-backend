@@ -1,4 +1,11 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  OneToMany,
+  CreateDateColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { Connection } from '../../auth/entities/connection.entity';
 import { Permission, Role } from 'src/authorization/entities/permission.entity';
 
@@ -30,4 +37,10 @@ export class User {
     nullable: true,
   })
   permissions: Permission[];
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 }
