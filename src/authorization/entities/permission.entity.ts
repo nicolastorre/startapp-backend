@@ -47,5 +47,5 @@ export class Permission {
   role: Role;
 
   @ManyToOne(() => Resource, (resource) => resource.permissions)
-  resource: Resource;
+  resource?: Resource;
 }

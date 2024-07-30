@@ -15,4 +15,7 @@ export class CreatePermissionDto {
   role: Role;
 
   resource?: Resource;
+
+  @IsString()
+  type?: string;
 }

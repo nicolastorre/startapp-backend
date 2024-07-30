@@ -3,7 +3,7 @@ import { CreateArticleDto } from './dto/create-article.dto';
 import { UpdateArticleDto } from './dto/update-article.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Article } from './entities/article.entity';
-import { Repository } from 'typeorm';
+import { Brackets, Repository } from 'typeorm';
 import { Action, Role } from 'src/authorization/entities/permission.entity';
 import { ResourceService } from 'src/authorization/resource.service';
 
@@ -27,6 +27,28 @@ export class ArticlesService {
 
   findAll(): Promise<Article[]> {
     return this.articleRepository.find();
+  }
+
+  findAllWithPermissions(
+    role: Role,
+    userUuid: string,
+    action: Action,
+  ): Promise<Article[]> {
+    return this.articleRepository
+      .createQueryBuilder('article')
+      .innerJoinAndSelect('article.resource', 'resource')
+      .innerJoin('resource.permissions', 'permissions')
+      .where('permissions.action = :action', { action })
+      .andWhere(
+        new Brackets((qb) => {
+          qb.where('permissions.user = :userUuid', {
+            userUuid,
+          }).orWhere('permissions.role = :role', {
+            role,
+          });
+        }),
+      )
+      .getMany();
   }
 
   findOneByResourceUuid(uuid: string): Promise<Article | null> {

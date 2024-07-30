@@ -23,25 +23,18 @@ export class PoliciesGuard implements CanActivate {
     let userPermissions: Permission[] = [];
     let rolePermissions: Permission[] = [];
 
-    if (!resource) {
-      rolePermissions = await this.permissionService.findRolePermissions(
+    userPermissions = await this.permissionService.findUserPermissions(
+      user.uuid,
+      resource.uuid,
+      action,
+    );
+
+    rolePermissions =
+      await this.permissionService.findRolePermissionsByResource(
         user.role,
-        action,
-      );
-    } else {
-      userPermissions = await this.permissionService.findUserPermissions(
-        user.uuid,
         resource.uuid,
         action,
       );
-
-      rolePermissions =
-        await this.permissionService.findRolePermissionsByResource(
-          user.role,
-          resource.uuid,
-          action,
-        );
-    }
 
     const permissions = [...userPermissions, ...rolePermissions];
 

@@ -20,13 +20,13 @@ export class ResourceService {
     user?: User,
   ): CreateResourceDto {
     const createResourceDto = new CreateResourceDto();
-    createResourceDto.type = type;
     createResourceDto.permissions = [];
     for (const action of actions) {
       createResourceDto.permissions?.push({
         action,
         role,
         user,
+        type,
       });
     }
     return createResourceDto;

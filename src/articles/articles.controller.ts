@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   UseGuards,
+  Req,
 } from '@nestjs/common';
 import { ArticlesService } from './articles.service';
 import { CreateArticleDto } from './dto/create-article.dto';
@@ -14,7 +15,9 @@ import { UpdateArticleDto } from './dto/update-article.dto';
 import { FindOneParamDto } from 'src/common/dto/find-one-param.dto';
 import { PoliciesGuard } from 'src/authorization/policies.guard';
 import { PermissionAction } from 'src/authorization/decorators/permission.decorator';
-import { Action } from 'src/authorization/entities/permission.entity';
+import { Action, Role } from 'src/authorization/entities/permission.entity';
+import { Roles } from 'src/authorization/decorators/roles.decorator';
+import { RolesGuard } from 'src/authorization/role.guards';
 
 @Controller('articles')
 export class ArticlesController {
@@ -25,11 +28,16 @@ export class ArticlesController {
     return this.articlesService.create(createArticleDto);
   }
 
-  @UseGuards(PoliciesGuard)
   @PermissionAction(Action.READ)
+  @Roles(Role.ADMIN, Role.USER)
+  @UseGuards(RolesGuard)
   @Get()
-  findAll() {
-    return this.articlesService.findAll();
+  findAll(@Req() req: any) {
+    return this.articlesService.findAllWithPermissions(
+      req.user.role,
+      req.user.uuid,
+      Action.READ,
+    );
   }
 
   @UseGuards(PoliciesGuard)
