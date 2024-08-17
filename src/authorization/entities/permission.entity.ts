@@ -11,6 +11,7 @@ export enum Action {
 }
 
 export enum Role {
+  ROOT = 'ROOT',
   ADMIN = 'ADMIN',
   EDITOR = 'EDITOR',
   AUTHOR = 'AUTHOR',

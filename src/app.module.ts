@@ -29,6 +29,8 @@ import { Connection } from './auth/entities/connection.entity';
         ...config.get('database'),
         autoLoadEntities: true,
         entities: [User, Connection, Resource, Permission, Article],
+        migrations: ['./migrations'],
+        migrationsTableName: 'custom_migration_table',
       }),
     }),
     UserModule,
