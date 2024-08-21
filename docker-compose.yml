@@ -3,6 +3,7 @@ services:
     build:
       context: .
       dockerfile: docker/app/Dockerfile
+    command: tail -f /dev/null
     container_name: app
     environment:
       - PORT=${PORT:-3000}

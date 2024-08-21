@@ -7,7 +7,8 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { Connection } from '../../auth/entities/connection.entity';
-import { Permission, Role } from 'src/authorization/entities/permission.entity';
+import { Permission } from '../../authorization/entities/permission.entity';
+import { Role } from '../../authorization/Role.enum';
 
 @Entity()
 export class User {

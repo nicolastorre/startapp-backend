@@ -1,23 +1,8 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
 import { Resource } from './resource.entity';
-import { User } from 'src/user/entities/user.entity';
-
-export enum Action {
-  READ = 'READ',
-  WRITE = 'WRITE',
-  EDIT = 'EDIT',
-  DELETE = 'DELETE',
-  PUBLISH = 'PUBLISH',
-}
-
-export enum Role {
-  ROOT = 'ROOT',
-  ADMIN = 'ADMIN',
-  EDITOR = 'EDITOR',
-  AUTHOR = 'AUTHOR',
-  CONTRIBUTOR = 'CONTRIBUTOR',
-  USER = 'USER',
-}
+import { User } from '../../user/entities/user.entity';
+import { Role } from '../Role.enum';
+import { Action } from '../Action.enum';
 
 @Entity()
 export class Permission {
