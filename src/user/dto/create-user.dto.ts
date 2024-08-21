@@ -1,5 +1,5 @@
 import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
-import { Role } from 'src/authorization/entities/permission.entity';
+import { Role } from 'src/authorization/Role.enum';
 
 export class CreateUserDto {
   @IsEmail()

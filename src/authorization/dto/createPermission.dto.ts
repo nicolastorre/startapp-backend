@@ -1,7 +1,8 @@
 import { IsString } from 'class-validator';
-import { Action, Role } from '../entities/permission.entity';
 import { User } from 'src/user/entities/user.entity';
 import { Resource } from '../entities/resource.entity';
+import { Action } from '../Action.enum';
+import { Role } from '../Role.enum';
 
 export class CreatePermissionDto {
   @IsString()

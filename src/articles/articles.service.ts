@@ -4,8 +4,9 @@ import { UpdateArticleDto } from './dto/update-article.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Article } from './entities/article.entity';
 import { Brackets, Repository } from 'typeorm';
-import { Action, Role } from 'src/authorization/entities/permission.entity';
 import { ResourceService } from 'src/authorization/resource.service';
+import { Action } from 'src/authorization/Action.enum';
+import { Role } from 'src/authorization/Role.enum';
 
 @Injectable()
 export class ArticlesService {

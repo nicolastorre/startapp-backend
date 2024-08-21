@@ -15,9 +15,10 @@ import { UpdateArticleDto } from './dto/update-article.dto';
 import { FindOneParamDto } from 'src/common/dto/find-one-param.dto';
 import { PoliciesGuard } from 'src/authorization/policies.guard';
 import { PermissionAction } from 'src/authorization/decorators/permission.decorator';
-import { Action, Role } from 'src/authorization/entities/permission.entity';
 import { Roles } from 'src/authorization/decorators/roles.decorator';
 import { RolesGuard } from 'src/authorization/role.guards';
+import { Action } from 'src/authorization/Action.enum';
+import { Role } from 'src/authorization/Role.enum';
 
 @Controller('articles')
 export class ArticlesController {

@@ -1,12 +1,10 @@
-import {
-  Action,
-  Permission,
-  Role,
-} from 'src/authorization/entities/permission.entity';
+import { Permission } from 'src/authorization/entities/permission.entity';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreatePermissionDto } from './dto/createPermission.dto';
+import { Role } from './Role.enum';
+import { Action } from './Action.enum';
 
 @Injectable()
 export class PermissionService {

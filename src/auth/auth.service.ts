@@ -5,7 +5,7 @@ import { ConnectionService } from './connection.service';
 import { Connection } from './entities/connection.entity';
 import * as bcrypt from 'bcrypt';
 import { ConfigService } from '@nestjs/config';
-import { Role } from 'src/authorization/entities/permission.entity';
+import { Role } from 'src/authorization/Role.enum';
 
 export type TokenPayload = {
   uuid: string;

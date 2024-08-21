@@ -3,8 +3,9 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Resource } from './entities/resource.entity';
 import { CreateResourceDto } from './dto/createResource.dto';
-import { Action, Role } from './entities/permission.entity';
 import { User } from 'src/user/entities/user.entity';
+import { Action } from './Action.enum';
+import { Role } from './Role.enum';
 
 @Injectable()
 export class ResourceService {
