@@ -59,7 +59,7 @@ export class AuthService {
     return this.connectionService.removeBy('refreshToken', refreshToken);
   }
 
-  async token(oldRefreshToken: string): Promise<Tokens> {
+  async refreshConnection(oldRefreshToken: string): Promise<Tokens> {
     let payload: TokenPayload;
     try {
       payload = await this.jwtService.verifyAsync(oldRefreshToken, {

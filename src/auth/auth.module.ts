@@ -9,6 +9,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Connection } from './entities/connection.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConnectionService } from './connection.service';
+import { CommonModule } from 'src/common/common.module';
+import { SetAuthCookiesInterceptor } from './SetAuthCookiesInterceptor';
 
 @Module({
   imports: [
@@ -22,11 +24,13 @@ import { ConnectionService } from './connection.service';
       global: true,
     }),
     UserModule,
+    CommonModule,
   ],
   controllers: [AuthController],
   providers: [
     AuthService,
     ConnectionService,
+    SetAuthCookiesInterceptor,
     {
       provide: APP_GUARD,
       useClass: AuthGuard,
