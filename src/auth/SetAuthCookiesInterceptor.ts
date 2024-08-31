@@ -18,10 +18,12 @@ export class SetAuthCookiesInterceptor implements NestInterceptor {
         response.cookie('accessToken', accessToken, {
           httpOnly: true,
           secure: true,
+          sameSite: 'Strict',
         });
         response.cookie('refreshToken', refreshToken, {
           httpOnly: true,
           secure: true,
+          sameSite: 'Strict',
         });
 
         return rest;
