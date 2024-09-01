@@ -1,11 +1,146 @@
 {
 	"info": {
 		"_postman_id": "8b13a06d-5b42-4d03-961e-0c8e5eeb62ad",
-		"name": "Labback",
+		"name": "startapp",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "9660118"
 	},
 	"item": [
+		{
+			"name": "auth",
+			"item": [
+				{
+					"name": "login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var cookies = pm.cookies.toObject(); // Obtient les cookies comme un objet",
+									"if (cookies['xsrf-token']) {",
+									"    pm.collectionVariables.set(\"xsrfToken\", cookies['xsrf-token']);",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"test@test.fr\",\n    \"password\": \"1234\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/auth/login",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "logout",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/auth/logout",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"auth",
+								"logout"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "refreshConnection",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/auth/refreshConnection",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"auth",
+								"refreshConnection"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
 		{
 			"name": "user",
 			"item": [
@@ -26,7 +161,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"email\": \"test@test.fr\",\n    \"password\": \"1234\"\n}",
+							"raw": "{\n    \"email\": \"test@test.fr\",\n    \"password\": \"1234\",\n    \"role\": \"ADMIN\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -200,29 +335,89 @@
 			]
 		},
 		{
-			"name": "auth",
+			"name": "article",
 			"item": [
 				{
-					"name": "login",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"const response = pm.response.json();",
-									"pm.collectionVariables.set('accessToken', response.accessToken);"
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
+					"name": "get articles",
 					"request": {
-						"method": "POST",
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
 						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/articles/",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"articles",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get article",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/articles/resource/d8cbc902-3384-4867-84e0-a43185f5e0b3",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"articles",
+								"resource",
+								"d8cbc902-3384-4867-84e0-a43185f5e0b3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create article",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "xsrf-token",
+								"value": "{{xsrfToken}}",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"email\": \"test@test.fr\",\n    \"password\": \"1234\"\n}",
+							"raw": "{\n    \"title\": \"test\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -230,13 +425,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseURL}}/auth/login",
+							"raw": "{{baseURL}}/articles/",
 							"host": [
 								"{{baseURL}}"
 							],
 							"path": [
-								"auth",
-								"login"
+								"articles",
+								""
 							]
 						}
 					},
@@ -270,12 +465,22 @@
 	"variable": [
 		{
 			"key": "baseURL",
-			"value": "localhost:3000",
+			"value": "localhost:9000",
 			"type": "string"
 		},
 		{
 			"key": "accessToken",
 			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJlYmU2ZDFjNS0yYzE4LTQ4NGYtOTVkMC03M2Y1MzIwOWNhZTgiLCJ1c2VybmFtZSI6InRlc3RAdGVzdC5mciIsImlhdCI6MTcyMTE0MzAzNCwiZXhwIjoxNzIxMTQzMDk0fQ.-Oom9twgweEXMiulJia8nH6nK2k3-UiU-w24PEkbEBg",
+			"type": "string"
+		},
+		{
+			"key": "refreshToken",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "xsrfToken",
+			"value": "2adaa8965ff7417b1bfc5700a15a85efee53f4fd83899ef662563f84e49bfcd0",
 			"type": "string"
 		}
 	]

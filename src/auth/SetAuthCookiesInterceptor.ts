@@ -12,7 +12,7 @@ export class SetAuthCookiesInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     return next.handle().pipe(
       map((responseBody: any) => {
-        const { accessToken, refreshToken, ...rest } = responseBody;
+        const { accessToken, refreshToken, xsrfToken, ...rest } = responseBody;
 
         const response = context.switchToHttp().getResponse();
         response.cookie('accessToken', accessToken, {
@@ -25,7 +25,11 @@ export class SetAuthCookiesInterceptor implements NestInterceptor {
           secure: true,
           sameSite: 'Strict',
         });
-
+        response.cookie('XSRF-TOKEN', xsrfToken, {
+          httpOnly: true,
+          secure: true,
+          sameSite: 'Strict',
+        });
         return rest;
       }),
     );

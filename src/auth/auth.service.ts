@@ -6,13 +6,20 @@ import { Connection } from './entities/connection.entity';
 import * as bcrypt from 'bcrypt';
 import { ConfigService } from '@nestjs/config';
 import { Role } from 'src/authorization/Role.enum';
+import { createHmac } from 'crypto';
+import { v4 as uuidv4 } from 'uuid';
 
 export type TokenPayload = {
-  uuid: string;
+  sessionUuid: string;
+  userUuid: string;
   role: Role;
 };
 
-export type Tokens = { accessToken: string; refreshToken: string };
+export type Tokens = {
+  accessToken: string;
+  refreshToken: string;
+  xsrfToken: string;
+};
 
 @Injectable()
 export class AuthService {
@@ -39,10 +46,16 @@ export class AuthService {
 
     delete user.hashedPassword;
 
-    const payload: TokenPayload = { uuid: user.uuid, role: user.role };
+    const sessionUuid = uuidv4();
+    const payload: TokenPayload = {
+      sessionUuid,
+      userUuid: user.uuid,
+      role: user.role,
+    };
 
     const accessToken = await this.jwtService.signAsync(payload);
     const refreshToken = await this.jwtService.signAsync(payload);
+    const xsrfToken = this.generateXsrfToken(sessionUuid);
 
     const connection = new Connection();
     connection.refreshToken = refreshToken;
@@ -52,6 +65,7 @@ export class AuthService {
     return {
       accessToken,
       refreshToken,
+      xsrfToken,
     };
   }
 
@@ -69,13 +83,17 @@ export class AuthService {
       throw new UnauthorizedException();
     }
 
-    const user = await this.userService.findOneBy('uuid', payload.uuid);
+    const user = await this.userService.findOneBy('uuid', payload.userUuid);
     if (!user) {
       throw new UnauthorizedException();
     }
 
+    const sessionUuid = uuidv4();
+    payload.sessionUuid = sessionUuid;
+
     const accessToken = await this.jwtService.signAsync(payload);
     const refreshToken = await this.jwtService.signAsync(payload);
+    const xsrfToken = this.generateXsrfToken(sessionUuid);
 
     const connection = await this.connectionService.findOneBy(
       'refreshToken',
@@ -92,6 +110,12 @@ export class AuthService {
     return {
       accessToken,
       refreshToken,
+      xsrfToken,
     };
+  }
+
+  generateXsrfToken(sessionId: string): string {
+    const xsrfSecret = this.configService.get('xsrf.secret');
+    return createHmac('sha256', xsrfSecret).update(sessionId).digest('hex');
   }
 }

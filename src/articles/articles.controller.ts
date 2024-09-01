@@ -19,12 +19,15 @@ import { Roles } from 'src/authorization/decorators/roles.decorator';
 import { RolesGuard } from 'src/authorization/role.guards';
 import { Action } from 'src/authorization/Action.enum';
 import { Role } from 'src/authorization/Role.enum';
+import { XsrfGuard } from 'src/auth/Xsrf.guard';
 
 @Controller('articles')
 export class ArticlesController {
   constructor(private readonly articlesService: ArticlesService) {}
 
   @Post()
+  @Roles(Role.ADMIN)
+  @UseGuards(XsrfGuard)
   create(@Body() createArticleDto: CreateArticleDto, @Req() req: any) {
     createArticleDto.user = req.user.uuid;
     return this.articlesService.create(createArticleDto);

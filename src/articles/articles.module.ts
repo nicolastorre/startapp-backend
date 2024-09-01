@@ -5,9 +5,14 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Article } from './entities/article.entity';
 import { AuthorizationModule } from 'src/authorization/authorization.module';
 import { ResourceMiddleware } from 'src/authorization/middlewares/resource.middleware';
+import { AuthModule } from 'src/auth/auth.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Article]), AuthorizationModule],
+  imports: [
+    TypeOrmModule.forFeature([Article]),
+    AuthModule,
+    AuthorizationModule,
+  ],
   controllers: [ArticlesController],
   providers: [ArticlesService],
 })

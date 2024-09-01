@@ -11,6 +11,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConnectionService } from './connection.service';
 import { CommonModule } from 'src/common/common.module';
 import { SetAuthCookiesInterceptor } from './SetAuthCookiesInterceptor';
+import { XsrfGuard } from './Xsrf.guard';
 
 @Module({
   imports: [
@@ -31,10 +32,12 @@ import { SetAuthCookiesInterceptor } from './SetAuthCookiesInterceptor';
     AuthService,
     ConnectionService,
     SetAuthCookiesInterceptor,
+    XsrfGuard,
     {
       provide: APP_GUARD,
       useClass: AuthGuard,
     },
   ],
+  exports: [AuthService, XsrfGuard],
 })
 export class AuthModule {}
