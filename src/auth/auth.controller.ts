@@ -43,6 +43,10 @@ export class AuthController {
       httpOnly: true,
       secure: true,
     });
+    response.clearCookie('XSRF-TOKEN', {
+      httpOnly: true,
+      secure: true,
+    });
     return { message: 'ok' };
   }
 
