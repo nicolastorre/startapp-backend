@@ -11,7 +11,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConnectionService } from './connection.service';
 import { CommonModule } from 'src/common/common.module';
 import { SetAuthCookiesInterceptor } from './SetAuthCookiesInterceptor';
-import { XsrfGuard } from './Xsrf.guard';
+import { XsrfGuard } from './xsrf.guard';
 
 @Module({
   imports: [

@@ -19,7 +19,7 @@ import { Roles } from 'src/authorization/decorators/roles.decorator';
 import { RolesGuard } from 'src/authorization/role.guards';
 import { Action } from 'src/authorization/Action.enum';
 import { Role } from 'src/authorization/Role.enum';
-import { XsrfGuard } from 'src/auth/Xsrf.guard';
+import { XsrfGuard } from 'src/auth/xsrf.guard';
 
 @Controller('articles')
 export class ArticlesController {
