@@ -1,5 +1,4 @@
 import { IsString } from 'class-validator';
-import { CreateResourceDto } from 'src/authorization/dto/createResource.dto';
 import { User } from 'src/user/entities/user.entity';
 
 export class CreateArticleDto {
@@ -7,6 +6,4 @@ export class CreateArticleDto {
   title: string;
 
   user: User;
-
-  resource: CreateResourceDto;
 }
