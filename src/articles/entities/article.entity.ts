@@ -1,12 +1,9 @@
-import { Resource } from '../../authorization/entities/resource.entity';
 import { User } from '../../user/entities/user.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
-  JoinColumn,
   ManyToOne,
-  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -21,10 +18,6 @@ export class Article {
 
   @ManyToOne(() => User, (user) => user.uuid)
   user: User;
-
-  @OneToOne(() => Resource, { cascade: true, eager: true })
-  @JoinColumn()
-  resource: Resource;
 
   @CreateDateColumn()
   createdAt: Date;
