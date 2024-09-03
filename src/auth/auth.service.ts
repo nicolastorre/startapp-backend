@@ -88,20 +88,21 @@ export class AuthService {
       throw new UnauthorizedException();
     }
 
+    const connection = await this.connectionService.findOneBy(
+      'refreshToken',
+      oldRefreshToken,
+    );
+
+    if (!connection) {
+      throw new UnauthorizedException();
+    }
+
     const sessionUuid = uuidv4();
     payload.sessionUuid = sessionUuid;
 
     const accessToken = await this.jwtService.signAsync(payload);
     const refreshToken = await this.jwtService.signAsync(payload);
     const xsrfToken = this.generateXsrfToken(sessionUuid);
-
-    const connection = await this.connectionService.findOneBy(
-      'refreshToken',
-      refreshToken,
-    );
-    if (!connection) {
-      throw new UnauthorizedException();
-    }
 
     connection.refreshToken = refreshToken;
     connection.user = user;
