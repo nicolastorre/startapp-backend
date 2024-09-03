@@ -20,6 +20,7 @@ import { XsrfGuard } from './xsrf.guard';
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
         secret: configService.get<string>('jwt.secret'),
+        signOptions: { expiresIn: configService.get<string>('jwt.expiresIn') },
       }),
       inject: [ConfigService],
       global: true,
