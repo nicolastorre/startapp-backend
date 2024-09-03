@@ -8,6 +8,8 @@ import {
   Delete,
   Request,
   UseGuards,
+  UseInterceptors,
+  ClassSerializerInterceptor,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -31,10 +33,11 @@ export class UserController {
     return this.userService.findAll();
   }
 
+  @UseInterceptors(ClassSerializerInterceptor)
   @UseGuards(AuthGuard)
   @Get('/user/profile')
   getProfile(@Request() req: any) {
-    return req.user;
+    return this.userService.findOneBy('uuid', req.user.uuid);
   }
 
   @Get('/user/:uuid')
