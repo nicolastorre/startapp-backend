@@ -2,6 +2,7 @@ import {
   BadRequestException,
   Body,
   Controller,
+  Delete,
   HttpCode,
   HttpStatus,
   Post,
@@ -29,7 +30,7 @@ export class AuthController {
   }
 
   @HttpCode(HttpStatus.OK)
-  @Post('logout')
+  @Delete('logout')
   async logout(
     @Req() request: Request,
     @Res({ passthrough: true }) response: Response,
