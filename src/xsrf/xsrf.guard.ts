@@ -5,11 +5,12 @@ import {
   BadRequestException,
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
-import { AuthService, TokenPayload } from './auth.service';
+import { TokenPayload } from '../auth/auth.service';
+import { XsrfService } from 'src/xsrf/xsrf.service';
 
 @Injectable()
 export class XsrfGuard implements CanActivate {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly xsrfService: XsrfService) {}
 
   canActivate(
     context: ExecutionContext,
@@ -22,7 +23,7 @@ export class XsrfGuard implements CanActivate {
       throw new BadRequestException('Session UUID not found');
     }
 
-    const expectedToken = this.authService.generateXsrfToken(
+    const expectedToken = this.xsrfService.generateXsrfToken(
       payload?.sessionUuid,
     );
     if (xsrfTokenFromHeader !== expectedToken) {

@@ -16,7 +16,7 @@ import { FindOneParamDto } from 'src/common/dto/find-one-param.dto';
 import { Roles } from 'src/authorization/decorators/roles.decorator';
 import { RolesGuard } from 'src/authorization/role.guards';
 import { Role } from 'src/authorization/Role.enum';
-import { XsrfGuard } from 'src/auth/xsrf.guard';
+import { XsrfGuard } from 'src/xsrf/xsrf.guard';
 
 @Controller('articles')
 export class ArticlesController {

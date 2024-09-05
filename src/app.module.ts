@@ -10,6 +10,7 @@ import { AuthModule } from './auth/auth.module';
 import { AuthorizationModule } from './authorization/authorization.module';
 import { ArticlesModule } from './articles/articles.module';
 import { AppDataSource } from './config/data-source';
+import { XsrfModule } from './xsrf/xsrf.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { AppDataSource } from './config/data-source';
     AuthModule,
     AuthorizationModule,
     ArticlesModule,
+    XsrfModule,
   ],
   controllers: [AppController],
   providers: [AppService],
