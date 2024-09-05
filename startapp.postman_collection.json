@@ -76,7 +76,7 @@
 								}
 							]
 						},
-						"method": "POST",
+						"method": "DELETE",
 						"header": [],
 						"body": {
 							"mode": "raw",
@@ -107,7 +107,10 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									""
+									"var cookies = pm.cookies.toObject(); // Obtient les cookies comme un objet",
+									"if (cookies['xsrf-token']) {",
+									"    pm.collectionVariables.set(\"xsrfToken\", cookies['xsrf-token']);",
+									"}"
 								],
 								"type": "text/javascript",
 								"packages": {}
@@ -145,7 +148,7 @@
 			"name": "user",
 			"item": [
 				{
-					"name": "create user",
+					"name": "get profile",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -157,25 +160,17 @@
 								}
 							]
 						},
-						"method": "POST",
+						"method": "GET",
 						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"email\": \"test@test.fr\",\n    \"password\": \"1234\",\n    \"role\": \"ADMIN\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
 						"url": {
-							"raw": "{{baseURL}}/users/user",
+							"raw": "{{baseURL}}/users/user/profile",
 							"host": [
 								"{{baseURL}}"
 							],
 							"path": [
 								"users",
-								"user"
+								"user",
+								"profile"
 							]
 						}
 					},
@@ -239,7 +234,7 @@
 					"response": []
 				},
 				{
-					"name": "get profile",
+					"name": "create user",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -251,17 +246,25 @@
 								}
 							]
 						},
-						"method": "GET",
+						"method": "POST",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"test2@test.fr\",\n    \"password\": \"1234\",\n    \"role\": \"USER\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
-							"raw": "{{baseURL}}/users/user/profile",
+							"raw": "{{baseURL}}/users/user",
 							"host": [
 								"{{baseURL}}"
 							],
 							"path": [
 								"users",
-								"user",
-								"profile"
+								"user"
 							]
 						}
 					},
@@ -408,6 +411,86 @@
 							]
 						},
 						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"test\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/articles/",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"articles",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update article",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "xsrf-token",
+								"value": "{{xsrfToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"test\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/articles/",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"articles",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete article",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
 						"header": [
 							{
 								"key": "xsrf-token",
@@ -447,7 +530,16 @@
 				"type": "text/javascript",
 				"packages": {},
 				"exec": [
-					""
+					"const xsrfToken = pm.collectionVariables.get('xsrfToken');",
+					"",
+					"if (xsrfToken) {",
+					"    pm.request.headers.add({",
+					"        key: 'xsrf-token',",
+					"        value: xsrfToken",
+					"    });",
+					"} else {",
+					"    console.log(\"La variable xsrfToken n'est pas définie.\");",
+					"}"
 				]
 			}
 		},
