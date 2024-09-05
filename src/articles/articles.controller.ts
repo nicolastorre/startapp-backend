@@ -23,7 +23,6 @@ export class ArticlesController {
   constructor(private readonly articlesService: ArticlesService) {}
 
   @Roles(Role.ADMIN)
-  @UseGuards(RolesGuard)
   @Get()
   findAll() {
     return this.articlesService.findAll();
@@ -36,17 +35,21 @@ export class ArticlesController {
 
   @Post()
   @Roles(Role.ADMIN)
-  @UseGuards(XsrfGuard)
+  @UseGuards(XsrfGuard, RolesGuard)
   create(@Body() createArticleDto: CreateArticleDto, @Req() req: any) {
     createArticleDto.user = req.user.uuid;
     return this.articlesService.create(createArticleDto);
   }
 
+  @Roles(Role.ADMIN)
+  @UseGuards(XsrfGuard, RolesGuard)
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateArticleDto: UpdateArticleDto) {
     return this.articlesService.update('uuid', updateArticleDto);
   }
 
+  @Roles(Role.ADMIN)
+  @UseGuards(XsrfGuard, RolesGuard)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.articlesService.remove(+id);
