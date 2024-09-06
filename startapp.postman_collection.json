@@ -31,7 +31,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"email\": \"test@test.fr\",\n    \"password\": \"1234\"\n}",
+							"raw": "{\n    \"email\": \"admin@4app.fr\",\n    \"password\": \"1234\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
