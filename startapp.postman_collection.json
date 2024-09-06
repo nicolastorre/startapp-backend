@@ -17,8 +17,8 @@
 							"script": {
 								"exec": [
 									"var cookies = pm.cookies.toObject(); // Obtient les cookies comme un objet",
-									"if (cookies['xsrf-token']) {",
-									"    pm.collectionVariables.set(\"xsrfToken\", cookies['xsrf-token']);",
+									"if (cookies['XSRF-TOKEN']) {",
+									"    pm.collectionVariables.set(\"xsrfToken\", cookies['XSRF-TOKEN']);",
 									"}"
 								],
 								"type": "text/javascript",
@@ -534,7 +534,7 @@
 					"",
 					"if (xsrfToken) {",
 					"    pm.request.headers.add({",
-					"        key: 'xsrf-token',",
+					"        key: 'XSRF-TOKEN',",
 					"        value: xsrfToken",
 					"    });",
 					"} else {",

@@ -26,7 +26,7 @@ export class SetAuthCookiesInterceptor implements NestInterceptor {
           sameSite: 'Strict',
         });
         response.cookie('XSRF-TOKEN', xsrfToken, {
-          httpOnly: true,
+          httpOnly: false,
           secure: true,
           sameSite: 'Strict',
         });

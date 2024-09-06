@@ -17,7 +17,7 @@ export class XsrfGuard implements CanActivate {
   ): boolean | Promise<boolean> | Observable<boolean> {
     const request = context.switchToHttp().getRequest();
     const payload: TokenPayload = request['user'] || undefined;
-    const xsrfTokenFromHeader = request.headers['xsrf-token'];
+    const xsrfTokenFromHeader = request.headers['XSRF-TOKEN'];
 
     if (!payload?.sessionUuid) {
       throw new BadRequestException('Session UUID not found');
