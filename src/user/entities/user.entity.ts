@@ -26,6 +26,12 @@ export class User {
   @Column()
   hashedPassword?: string;
 
+  @Column()
+  firstname: string;
+
+  @Column()
+  name: string;
+
   @OneToMany(() => Connection, (connection) => connection.user, {
     eager: false,
   })
