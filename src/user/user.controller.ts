@@ -10,6 +10,7 @@ import {
   UseGuards,
   UseInterceptors,
   ClassSerializerInterceptor,
+  BadRequestException,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -26,8 +27,12 @@ export class UserController {
 
   @UseInterceptors(ClassSerializerInterceptor)
   @Get('/user/profile')
-  getProfile(@Request() req: any) {
-    return this.userService.findOneBy('uuid', req.user.uuid);
+  async getProfile(@Request() req: any) {
+    const user = await this.userService.findOneBy('uuid', req.user.userUuid);
+    if (!user) {
+      throw new BadRequestException();
+    }
+    return user;
   }
 
   @Roles(Role.ADMIN)
@@ -44,17 +49,12 @@ export class UserController {
     return this.userService.findAll();
   }
 
+  @UseInterceptors(ClassSerializerInterceptor)
   @Roles(Role.ADMIN)
   @UseGuards(RolesGuard)
   @Get('/user/:uuid')
   async findOne(@Param() findOneParamDto: FindOneParamDto) {
-    const user = await this.userService.findOneBy('uuid', findOneParamDto.uuid);
-
-    if (user) {
-      delete user.hashedPassword;
-    }
-
-    return user;
+    return this.userService.findOneBy('uuid', findOneParamDto.uuid);
   }
 
   @Roles(Role.ADMIN)
