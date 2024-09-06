@@ -54,7 +54,11 @@ export class UserController {
   @UseGuards(RolesGuard)
   @Get('/user/:uuid')
   async findOne(@Param() findOneParamDto: FindOneParamDto) {
-    return this.userService.findOneBy('uuid', findOneParamDto.uuid);
+    const user = await this.userService.findOneBy('uuid', findOneParamDto.uuid);
+    if (!user) {
+      throw new BadRequestException();
+    }
+    return user;
   }
 
   @Roles(Role.ADMIN)
