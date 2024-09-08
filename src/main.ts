@@ -11,6 +11,7 @@ async function bootstrap() {
 
   app.useGlobalPipes(new ValidationPipe({ whitelist: false, transform: true }));
   app.use(cookieParser());
+  app.setGlobalPrefix('api');
   app.enableCors({
     origin: configService.get<string>('frontendUrl'),
     credentials: true,
