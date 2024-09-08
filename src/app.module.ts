@@ -15,7 +15,7 @@ import { XsrfModule } from './xsrf/xsrf.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: ['.env.development.local'],
+      envFilePath: ['.env.local'],
       isGlobal: true,
       cache: true,
       load: [configuration],
