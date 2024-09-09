@@ -3,8 +3,8 @@ services:
     build:
       context: .
       dockerfile: docker/app/Dockerfile
-    command: tail -f /dev/null
     container_name: app
+    restart: always
     environment:
       - PORT=${PORT:-3000}
     ports:
@@ -17,6 +17,7 @@ services:
   db:
     image: postgres
     container_name: postgres
+    restart: always
     volumes:
       - ./pgdata:/var/lib/postgresql/data
     ports:
@@ -28,6 +29,7 @@ services:
   pgadmin:
     image: dpage/pgadmin4
     container_name: nest-pgadmin4
+    restart: always
     ports:
       - '5050:80'
     environment:
