@@ -2,8 +2,7 @@ import * as dotenv from 'dotenv';
 import { join } from 'path';
 import { DataSource } from 'typeorm';
 
-const env = process.env.NODE_ENV || 'development';
-const envFile = `.env.${env}.local`;
+const envFile = `.env`;
 const envPath = join(process.cwd(), envFile);
 
 dotenv.config({ path: envPath });
