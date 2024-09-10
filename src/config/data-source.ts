@@ -18,7 +18,7 @@ export const AppDataSource = new DataSource({
   migrations: [join(__dirname, '/../migrations/*{.ts,.js}')],
   synchronize: false,
 });
-
+console.log(AppDataSource.options);
 AppDataSource.initialize().catch((error) =>
   console.log('Error during Data Source initialization', error),
 );
