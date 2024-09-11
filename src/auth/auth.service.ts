@@ -13,6 +13,8 @@ export type TokenPayload = {
   sessionUuid: string;
   userUuid: string;
   role: Role;
+  exp?: number;
+  iat?: number;
 };
 
 export type Tokens = {
@@ -100,6 +102,8 @@ export class AuthService {
 
     const sessionUuid = uuidv4();
     payload.sessionUuid = sessionUuid;
+    delete payload.exp;
+    delete payload.iat;
 
     const accessToken = await this.jwtService.signAsync(payload);
     const refreshToken = await this.jwtService.signAsync(payload);
