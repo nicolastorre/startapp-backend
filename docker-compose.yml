@@ -14,7 +14,7 @@ services:
     environment:
       - PORT=${PORT:-3000}
     ports:
-      - '9000:3000'
+      - '127.0.0.1:9000:3000'
     volumes:
       - ./src:/app/src
     depends_on:
